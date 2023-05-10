@@ -1,6 +1,40 @@
 # test-vue-facing-decorator
 
-This template should help get you started developing with Vue 3 in Vite.
+
+When global method is used inside a class body it triggers an error.
+
+main.ts
+``` ts
+app.config.globalProperties.$test = () => "hello I'm func"
+```
+
+App.vue - TypeError: this.$test is not a function
+``` vue
+<script lang="ts">
+@Component
+export default class App extends Vue {
+  public msg = this.$test;
+}
+</script>
+```
+App.vue - this works just fine
+``` vue
+<script lang="ts">
+export default {
+  data() {
+    return {
+      msg: this.$test(),
+    }
+  }
+}
+</script>
+```
+
+Workaround is to use 
+``` ts
+import { Vue } from 'vue-facing-decorator';
+Vue.prototype.$test = () => "hello I'm func"
+```
 
 ## Recommended IDE Setup
 
